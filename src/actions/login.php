@@ -21,5 +21,5 @@ $user = $_POST['user'];
 $password = $_POST['password'];
 Autorization($user, $password);
 //usleep(3000000);
-//header("Location: functions.php");
-require('../../tents.php');
+header("Location: ../../tents.php");
+//require('../../tents.php');

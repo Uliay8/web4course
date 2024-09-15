@@ -1,31 +1,35 @@
 <?php
 date_default_timezone_set('Asia/Yekaterinburg');
-$title = "лаб1";
-?>
+$title = "лаб2";
+require_once __DIR__ . '/src/actions/getTitles.php';
 
+echo '
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title; ?></title>
+    <title>';echo $title;echo '</title>
 </head>
 
 <body>
 <main>
-    <form action="src/actions/login.php" method="post">
-        <h2>Вход</h2>
-        <label for="user">
-            Имя: <input type="text" id="user" name="user" placeholder="user1" >
-        </label><br><br>
+    <h3>Статьи:</h3>
+    <form method="post" action="">
+        <label for="article"> Рубрика:<br>
+            <input type="radio" name="article" value="tech" />Технологии <br>
+            <input type="radio" name="article" value="sport" />Спорт <br>
+        </label>
+        <input type="date" id="date" name="date"><br>
+        <button type="submit" id="submit">Вывести заголовки</button>
+    </form>';
 
-        <label for="password">
-            Пароль: <input type="password" id="password" name="password" placeholder="******">
-        </label><br><br>
+    if(isset($_POST['article']) || isset($_POST['date'])) {
+        GetTitles($_POST['article'], $_POST['date']);
+    }
 
-        <button type="submit" id="submit">Продолжить</button>
-    </form>
+echo '    
 </main>
 </body>
-</html>
+</html>';

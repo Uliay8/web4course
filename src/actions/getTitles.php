@@ -8,13 +8,11 @@ function GetTitles($typeArticle, $date)
     $date = substr($date, 0,4);
 
     $isPrintedArticle = false;
-//    $pathToFolders = "../articles/";
     $pathToFolders = "src/articles/";
     $descriptorFolders = opendir($pathToFolders);
     if ($descriptorFolders) {
         while (($toFolder = readdir($descriptorFolders)) !== false) {
             if($toFolder=='.' || $toFolder=='..') continue;
-//            echo "<br>файл: $toFolder : тип: " . filetype($pathToFolders . $toFolder) . "<br>";
             $pathToArticles = $pathToFolders . $toFolder . '/';
             $descriptorArticles = opendir($pathToArticles);
             if($descriptorArticles) {
@@ -34,17 +32,12 @@ function GetTitles($typeArticle, $date)
                         }
                     }
                 }
-                closedir($descriptorArticles);
+                //closedir($descriptorArticles);
             }
         }
         if (!$isPrintedArticle) {
             echo "Найдено 0 статей";
         }
-        closedir($descriptorFolders);
+        //closedir($descriptorFolders);
     }
-
 }
-//
-//$typeArticle = $_POST['article'] ?? null;
-//$date = $_POST['date'] ?? null;
-//GetTitles($typeArticle, $date);

@@ -26,7 +26,7 @@ echo '
     </form>';
 
     if(isset($_POST['article']) || isset($_POST['date'])) {
-        GetTitles($_POST['article'], $_POST['date']);
+        @GetTitles($_POST['article'], $_POST['date']);
     }
 
 echo '    

@@ -1,6 +1,19 @@
 <?php
 date_default_timezone_set('Asia/Yekaterinburg');
 $title = "лаб1";
+
+function tryToConnect($user = "user1", $password = "1", $db = "lab1")
+{
+    $connection = pg_connect("host=localhost dbname=$db user=$user password=$password");
+    if ($connection) {
+        echo "Подключение успешно";
+        pg_close($connection);
+        header("Location: /tents.php");
+        die();
+    } else {
+        echo "Ошибка: соединение не установлено";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +27,7 @@ $title = "лаб1";
 
 <body>
 <main>
-    <form action="src/actions/login.php" method="post">
+    <form action="" method="post">
         <h2>Вход</h2>
         <label for="user">
             Имя: <input type="text" id="user" name="user" placeholder="user1" >
@@ -26,6 +39,11 @@ $title = "лаб1";
 
         <button type="submit" id="submit">Продолжить</button>
     </form>
+    <?php
+    if (isset($_POST['user']) && isset($_POST['password'])) {
+        @tryToConnect($_POST['user'], $_POST['password']);
+    }
+    ?>
 </main>
 </body>
 </html>

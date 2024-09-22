@@ -9,6 +9,7 @@ echo '<!DOCTYPE html>
 </head>
 <body>
 <form action="" method="post">
+    <p>Подключение успешно</p>
     <h2>Введите компанию: </h2>
     <label for="company">
         Имя: <input type="text" id="company" name="company" placeholder="Green Land" >
@@ -16,7 +17,7 @@ echo '<!DOCTYPE html>
     <button type="submit" id="submit">Найти</button>
 </form>';
  if (isset($_POST['company'])) {
-    GetNameAndImageByCompany($_POST['company']); }
+    @GetNameAndImageByCompany($_POST['company']); }
 
  echo '
 <form action="" method="post">
@@ -27,7 +28,7 @@ echo '<!DOCTYPE html>
     <button type="submit" id="submit">Найти</button>
 </form>';
 if (isset($_POST['capacity'])) {
-    GetDescriptionByCapacity($_POST['capacity']);}
+    @GetDescriptionByCapacity($_POST['capacity']);}
 
  echo '</body>
         </html>';

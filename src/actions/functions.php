@@ -3,8 +3,12 @@
 
 function GetNameAndImageByCompany($company = "Green Land")
 {
+    if (empty($company)){
+        echo "Введите компанию";
+        return;
+    }
     $path = 'src/вар3/';
-    $connection = pg_connect("host=localhost dbname=lab1 user=postgres password=postgres");;
+    $connection = pg_connect("host=localhost dbname=lab1 user=postgres password=postgres");
     $sql = "SELECT namet, SUBSTRING(imageName,1,LENGTH(imageName)-1) FROM tents WHERE country = '$company' LIMIT 1;";
     $result = pg_query($connection, $sql);
     if($result){
@@ -21,6 +25,10 @@ function GetNameAndImageByCompany($company = "Green Land")
 
 function GetDescriptionByCapacity($capacity=4)
 {
+    if (empty($capacity)){
+        echo "Введите количество мест";
+        return;
+    }
     $connection = pg_connect("host=localhost dbname=lab1 user=postgres password=postgres");;
     $sql = "SELECT description FROM tents WHERE capacity = $capacity LIMIT 1;";
     $result = pg_query($connection ,$sql);

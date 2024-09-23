@@ -1,8 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Yekaterinburg');
-$title = "лаб2";
-require_once __DIR__ . '/src/actions/getTitles.php';
-
+$title = "лаб3 варик2";
+require_once __DIR__ . '/src/actions/functions.php';
 echo '
 <!DOCTYPE html>
 <html lang="ru">
@@ -14,20 +13,11 @@ echo '
 </head>
 
 <body>
-<main>
-    <h3>Статьи:</h3>
-    <form method="post" action="">
-        <label for="article"> Рубрика:<br>
-            <input type="radio" name="article" value="tech" />Технологии <br>
-            <input type="radio" name="article" value="sport" />Спорт <br>
-        </label>
-        <input type="date" id="date" name="date"><br>
-        <button type="submit" id="submit">Вывести заголовки</button>
-    </form>';
+<main>';
 
-    if(isset($_POST['article']) || isset($_POST['date'])) {
-        @GetTitles($_POST['article'], $_POST['date']);
-    }
+echo getHtmlReport();
+
+//    GetTitles($_POST['article'], $_POST['date']);
 
 echo '    
 </main>

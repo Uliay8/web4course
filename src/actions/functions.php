@@ -1,6 +1,5 @@
 <?php
 
-
 function GetNameAndImageByCompany($company = "Green Land")
 {
     if (empty($company)){
@@ -13,12 +12,17 @@ function GetNameAndImageByCompany($company = "Green Land")
     $result = pg_query($connection, $sql);
     if($result){
         $result_array = pg_fetch_row($result);
-        echo 'Название палатки: ' . $result_array[0] ."<br>". 'Изображение:' ."<br>";
-        $file = $path . $result_array[1];
-        echo '<a><img src=' . $file . '></a>';
+        if ($result_array[0]=="") {
+            echo "Не найдено";
+        } else {
+            echo 'Название палатки: ' . $result_array[0] ."<br>". 'Изображение:' ."<br>";
+            $file = $path . $result_array[1];
+            echo '<a><img src=' . $file . '></a>';
+        }
+
     }
     else{
-        echo "Не найдено";
+        echo "Произошла ошибка запроса";
     }
     pg_close($connection);
 }
@@ -34,10 +38,14 @@ function GetDescriptionByCapacity($capacity=4)
     $result = pg_query($connection ,$sql);
     if($result){
         $result_array = pg_fetch_row($result);
-        echo 'Описание для палатки с вместимостью до ' . $capacity. ' человек:' ."<br>". $result_array[0];
+        if ($result_array[0]=="") {
+            echo "Не найдено";
+        } else {
+            echo 'Описание для палатки с вместимостью до ' . $capacity . ' человек:' . "<br>" . $result_array[0];
+        }
     }
-    else{
-        echo "Не найдено";
+    else {
+        echo "Произошла ошибка запроса";
     }
     pg_close($connection);
 }

@@ -6,7 +6,7 @@ function tryToConnect($user = "user1", $password = "1", $db = "lab1")
 {
     $connection = pg_connect("host=localhost dbname=$db user=$user password=$password");
     if ($connection) {
-        echo "Подключение успешно";
+//        echo "Подключение успешно";
         pg_close($connection);
         header("Location: /tents.php");
         die();

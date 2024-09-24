@@ -17,8 +17,6 @@ echo '
 
 echo getHtmlReport();
 
-//    GetTitles($_POST['article'], $_POST['date']);
-
 echo '    
 </main>
 </body>

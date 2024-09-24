@@ -1,7 +1,7 @@
 1,Hector,L,Curtis,male,San Antonio,TX,HectorLCurtis@mailinator.com,1.1-27-6193,11/28/1935,Training director,Waves Music,60.4,175,1592 Freshour Circle,78212,US
 2,Buffy,E,Dougherty,female,Miami,FL,BuffyEDougherty@dodgit.com,286-K335-0231,7/16/1937,Boilermaker,Prahject Planner,55.2,160,3192 Rinehart Road,33169,US
 3,Cynthia,E,Lopez,female,Chester,VA,CynthiaELopezdodgit.com,304-717-6627,1/26/1933,Psychiatric nurse,Hudson's MensWear,56.4,153,1319$ Fleming Way,23831,US
-4,Hect,L,Curtis,male,San Antonio,TX,HectLCurtis@mailinator.com,41K0-274-6193,1/8/1945,Training director,Waves Music,60.4,175,1592 3Freshour Circle,78212,US
-5,Buf,E,Dougherty,female,Miami,FL,BufEDougherty@dodgit.com,786-535-02G31,3/14/1947,Boilermaker,Prahject Planner,55.2,160,3192 Rinehart R.oad,33169,US
-6,Bob,E,Dougherty,female,Miami,FL,BobEDougherty@dodgit.com,6$86-335-0231,7/13/1957,Boilermaker,Prahject Planner,55.2,160,3192 Rinehart1 Road,33169,US
-7,Ben,E,Dougherty,female,Miami,FL,BenEDougherty@dodgit.com,786-3j35-0j231,2/11/1967,Boilermaker,Prahject Planner,55.2,160,3192_Rinehart Road,33169,US
+4,Hect,L,Curtis,male,San Antonio,TX,HectLCurtis@mailanator.com,41K0-274-6193,1/26/1933,Training director,Waves Music,60.4,175,1592 3Freshour Circle,78212,US
+5,Bef,E,Dougherty,male,Miami,FL,BufEDougherty@@dodgit.com,786-535-02G31,11/26/1933,Boilermaker,Prahject Planner,55.2,160,3192 Rinehart R.oad,33169,US
+6,Bob,E,Zougherty,female,Miami,FL,BobEDougherty@dodgit.com,6$86-335-0231,2/11/1967,Boilermaker,Prahject Planner,55.2,160,3192 Rinehart1 Road,33169,US
+7,Ben,E,Lopez,female,Miami,FL,BenEDougherty@dodgit.com,786-3j35-0j231,2/11/1967,Boilermaker,Prahject Planner,55.2,160,3192_Rinehart Road,33169,US

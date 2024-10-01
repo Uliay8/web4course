@@ -1,7 +1,7 @@
 <?php
 function getHtmlReport(): void
 {
-    $array = getReport();
+    $arrayFixedErrors = getReport();
     $statisticsPeople = getStatisticsPeople();
     $statisticsPeopleOld = $statisticsPeople[0];
     $statisticsPeopleYoung = $statisticsPeople[1];
@@ -9,8 +9,8 @@ function getHtmlReport(): void
     $statisticsEmailErrors = $statisticsEmail[0];
     $statisticsEmailServers = $statisticsEmail[1];
     echo '<h4>Проверка на ошибки:</h4>';
-    echo '<p>Количество исправленных ошибок в телефонах: ' . $array[0] . '</p>';
-    echo '<p>Количество исправленных ошибок в адресах: ' . $array[1] . '</p>';
+    echo '<p>Количество исправленных ошибок в телефонах: ' . $arrayFixedErrors[0] . '</p>';
+    echo '<p>Количество исправленных ошибок в адресах: ' . $arrayFixedErrors[1] . '</p>';
     echo '<p>-----</p>';
     echo '<p>Данные (пол, адрес, дата рождения) преобразованы в новый формат!</p>';
     echo '<p>Данные записаны в файл newBase.txt (в качестве разделителя использована точка с запятой)</p>';
@@ -22,12 +22,14 @@ function getHtmlReport(): void
         echo $temp[0] . ' ' . $temp[1] . ' ' . $temp[2] . '</br>';
     } while ($temp = next($statisticsPeopleOld));
     echo '</p>';
+
     echo '<p>Имя, телефон, адрес самого молодого человека (самых юных): </br>';
     $temp = current($statisticsPeopleYoung);
     do {
         echo $temp[0] . ' ' . $temp[1] . ' ' . $temp[2]. '</br>';
     } while ($temp = next($statisticsPeopleYoung));
     echo  '</p>';
+
 
     echo '<p>Количество клиентов для каждого почтового сервера:</br>';
     echo 'Не удалось распознать почтовый сервер для ' . $statisticsEmailErrors . ' адресов(а)<br>';
@@ -69,7 +71,6 @@ function getReport(): array
 //    $file = fopen('src/test.txt', 'r');
     $newFile = fopen('src/newBase.txt', 'w');
     if ($file) {
-        echo '<p>';
         while (($line = fgetcsv($file)) !== false) {
             //Убираем спецсимволы, проверяем количество параметров и номер строки
             $line = preg_replace('/[^a-zA-Z0-9_ &$#*()\[\].,\/@-]/', '', $line);
@@ -78,10 +79,10 @@ function getReport(): array
                 continue;
             }
             // присваеваем переменные и работаем с ними
-            list($id, $firstName, $middleInitial, $lastName, $gender, $city, $region, $email, $phone, $birthDate,
-                $post, $company, $weight, $height, $address, $postalCode, $countryCode) = $line;
+            [$id, $firstName, $middleInitial, $lastName, $gender, $city, $region, $email, $phone, $birthDate,
+                $post, $company, $weight, $height, $address, $postalCode, $countryCode] = $line;
 
-            // проверка ошибок и поддсчёт
+            // проверка ошибок и подсчёт
             $array = editPhone($phone);
             if ($array[1] > 0) {
                 $countPhoneErrors += 1;
@@ -200,16 +201,15 @@ function getAllResidents($receivedRegion): int|array {
 
             }
         }
-
-        $lastNameColumn  = array_column($arrayResidents, 'lastName');
-        $firstNameColumn  = array_column($arrayResidents, 'firstName');
-        array_multisort($lastNameColumn, SORT_ASC, $firstNameColumn, SORT_ASC, $arrayResidents);
         fclose($file);
     } else {
         echo "Ошибка открытия файла!";
         return 0;
     }
     if ($isExistsRegion) {
+        $lastNameColumn  = array_column($arrayResidents, 'lastName');
+        $firstNameColumn  = array_column($arrayResidents, 'firstName');
+        array_multisort($lastNameColumn, SORT_ASC, $firstNameColumn, SORT_ASC, $arrayResidents);
         return $arrayResidents;
     }
     return -1;

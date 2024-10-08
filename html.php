@@ -90,7 +90,7 @@ class HTMLPage
         return $tents;
     }
 
-    public function getTentByModel($name)
+    public function getTentByNameTent($name)
     {
         $sql = "SELECT * FROM tents WHERE namet = '$name';";
         $result = pg_query($this->connection ,$sql);

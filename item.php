@@ -5,7 +5,7 @@ $title = "Описание палатки";
 $page = new HTMLPage($title);
 
 $name = isset($_GET['namet']) ? $_GET['namet'] : '';
-$tent = $page->getTentByModel($name);
+$tent = $page->getTentByNameTent($name);
 
 if ($tent) {
     $content = "<h2>{$tent[0]}</h2>

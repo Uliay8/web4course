@@ -1,18 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Лабораторная 4</title>
+    <title>Лабораторная 5</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='style.css'>
+<!--    <script src="ajax.js"></script>-->
 </head>
 <body>
-<header class='header'><img src="{{ logo }}" alt="logo" class="logo" /><span>{{ header }}</span></header>
-<div class="main">
-    <div class='menu'> <ul>
-    {{ menu }}
-    </ul></div>
-    <div class="content">{{ content }}</div>
-</div>
-<footer class='footer'><p>{{ footer }}</p></footer>
+<form id="cost-form" action="" method="get">
+    <label for="operator">Оператор сотовой связи:</label>
+    <select id="operator" name="operator" oninput="calculateCost()">
+        <option value="">Выберите...</option>
+        {{ operator }}
+    </select> <br>
+
+    <label for="city">Город:</label>
+    <select id="city" name="city" oninput="calculateCost()">
+        <option value="">Выберите...</option>
+        {{ city }}
+    </select> <br>
+
+    <label for="time">Время разговора в роуминге (в минутах):</label>
+    <input type="number" id="time" name="time" oninput="calculateCost()" min="0" value=""><br>
+
+<!--    <button type="submit" id="submit">Посчитать</button><br><br>-->
+
+    <div>
+        <strong>Стоимость:</strong> <span id="cost"></span>
+    </div>
+</form>
+<script>
+    function calculateCost() {
+        var operator = document.getElementById("operator").value;
+        var city = document.getElementById("city").value;
+        var time = document.getElementById("time").value;
+
+        if (operator && city && time) {
+            var xhr = new XMLHttpRequest();
+
+            // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById("cost").innerText = + xhr.responseText + " руб.";
+                }
+            };
+            // xhr.open("GET", 'calculate.php"?operator=' + operator + "&city=" + city + "&time=" + time, true);
+            xhr.open("GET",'calculate.php?operator=' + operator + '&city=' + city + '&time=' + time, true);
+            xhr.send();
+            // "operator=" + operator + "&city=" + city + "&minutes=" + time
+        }
+    }
+    // $(document).ready(function() {
+    //     $('#cost-form').on('change keyup', function() {
+    //         var operator = $('#operator').val();
+    //         var city = $('#city').val();
+    //         var time = $('#time').val();
+    //
+    //         if (operator && city && time) {
+    //             $.ajax({
+    //                 url: 'calculate.php',
+    //                 type: 'GET',
+    //                 data: {
+    //                     operator: operator,
+    //                     city: city,
+    //                     time: time
+    //                 },
+    //                 success: function(response) {
+    //                     $('#cost').text(response);
+    //                 }
+    //             });
+    //         } else {
+    //             $('#cost').text('0.00');
+    //         }
+    //     });
+    // });
+</script>
 </body>
 </html>

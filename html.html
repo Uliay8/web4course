@@ -4,8 +4,8 @@
     <title>Лабораторная 5</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='style.css'>
-<!--    <script src="ajax.js"></script>-->
+<!--    <link rel='stylesheet' href='style.css'>-->
+    <script src="ajax.js"></script>
 </head>
 <body>
 <form id="cost-form" action="" method="get">
@@ -22,59 +22,11 @@
     </select> <br>
 
     <label for="time">Время разговора в роуминге (в минутах):</label>
-    <input type="number" id="time" name="time" oninput="calculateCost()" min="0" value=""><br>
-
+    <input type="number" id="time" name="time" oninput="calculateCost()" min="0" value=""><br><br>
 <!--    <button type="submit" id="submit">Посчитать</button><br><br>-->
-
     <div>
         <strong>Стоимость:</strong> <span id="cost"></span>
     </div>
 </form>
-<script>
-    function calculateCost() {
-        var operator = document.getElementById("operator").value;
-        var city = document.getElementById("city").value;
-        var time = document.getElementById("time").value;
-
-        if (operator && city && time) {
-            var xhr = new XMLHttpRequest();
-
-            // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById("cost").innerText = + xhr.responseText + " руб.";
-                }
-            };
-            // xhr.open("GET", 'calculate.php"?operator=' + operator + "&city=" + city + "&time=" + time, true);
-            xhr.open("GET",'calculate.php?operator=' + operator + '&city=' + city + '&time=' + time, true);
-            xhr.send();
-            // "operator=" + operator + "&city=" + city + "&minutes=" + time
-        }
-    }
-    // $(document).ready(function() {
-    //     $('#cost-form').on('change keyup', function() {
-    //         var operator = $('#operator').val();
-    //         var city = $('#city').val();
-    //         var time = $('#time').val();
-    //
-    //         if (operator && city && time) {
-    //             $.ajax({
-    //                 url: 'calculate.php',
-    //                 type: 'GET',
-    //                 data: {
-    //                     operator: operator,
-    //                     city: city,
-    //                     time: time
-    //                 },
-    //                 success: function(response) {
-    //                     $('#cost').text(response);
-    //                 }
-    //             });
-    //         } else {
-    //             $('#cost').text('0.00');
-    //         }
-    //     });
-    // });
-</script>
 </body>
 </html>

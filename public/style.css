@@ -26,6 +26,19 @@ div {margin: 2px; text-align:left; padding: 5px; background-color: hsl(100,50%,5
 .menu a { text-decoration: none; color: white;
 }
 
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+/*.footer {*/
+/*    background: hsl(100,50%,50%);*/
+/*    color: #fff;*/
+/*    text-align: center;*/
+/*    padding: 10px 0;*/
+/*    width: 100%;*/
+/*    margin-top: 20px;*/
+/*}*/
 /*.footer {background-color: hsl(100,50%,50%); display: block; font-size: 16px; border: 0px solid;*/
 /*    padding: 20px; margin: 10px;}*/
 
@@ -37,7 +50,7 @@ div {margin: 2px; text-align:left; padding: 5px; background-color: hsl(100,50%,5
 
 
 .leftcol {
-    float:  right; width: 72%; min-height: 200px;
+    float:  right; width: 74%; min-height: 200px;
     background-color: #ffffff;
 
 }

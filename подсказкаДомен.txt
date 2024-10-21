@@ -1,0 +1,70 @@
+Step 1: Installing and Starting XAMPP
+XAMPP is an open-source development tool that allows you to run an Apache server, MySQL database, and other essential tools from a single interface. To install XAMPP, follow these steps:
+Download XAMPP from the official website: https://www.apachefriends.org/download.html
+
+Launch the XAMPP interface and start the Apache and MySQL servers.
+The Xampp Interface
+
+
+Step 2: Setting Up Laravel
+Once XAMPP is up and running, we can proceed with setting up Laravel. Follow these steps:
+1. Open the XAMPP htdocs folder by clicking on the “Explorer” button in the XAMPP interface.
+2. Delete the files and folders within the htdocs folder to prepare it for your Laravel application.
+3. Inside the htdocs folder, you can either clone an existing Laravel application or set up a fresh installation using the command: `composer create-project laravel/laravel example-app`. Replace “example-app” with your preferred project name.
+
+The Laravel Directory Structure within htdocs
+
+
+Step 3: Configuring the Custom Domain Name
+To configure Laravel with a custom domain name, follow these steps:
+
+APP_URL=https://project.test
+You can replace “project.test” with your desired domain name.
+
+
+Step 4: Modifying the Hosts File
+To map your custom domain name to the local IP address, you need to modify the hosts file. Here’s how you can do it:
+
+1. Open Windows File Explorer and navigate to the “hosts” file located at `C:\Windows\System32\drivers\etc\hosts`.
+2. Open the “hosts” file using your code editor (e.g., VSCode) with administrative privileges.
+
+-Host-File
+“etc” directory containing the hosts file and other files
+3. Add the following line to the hosts file:
+
+127.0.0.1 project.test
+This entry maps the hostname “project.test” to the local IP address “127.0.0.1”.
+
+
+
+Step 5: Configuring the Apache Root Directory
+To ensure that your Laravel application loads correctly, you need to configure the Apache root directory. Follow these steps:
+
+1. Open Windows File Explorer and navigate to the “httpd.conf” file located at `C:\xampp\apache\conf\httpd.conf`.
+2. Open the “httpd.conf” file using your code editor (e.g., VSCode) with administrative privileges.
+3. Look for the “# Virtual hosts” section in the file and add the following configuration below it:
+
+<VirtualHost *:80>
+ ServerName project.test
+DocumentRoot "C:/xampp/htdocs/project/public"
+ <Directory "C:/xampp/htdocs/project/public">
+ Options Indexes FollowSymLinks Includes ExecCGI
+ AllowOverride All
+ Require all granted
+ </Directory>
+</VirtualHost>
+Note: Replace “project.test” with your custom domain name and “C:/xampp/htdocs/project/public” with the actual path to your project’s public folder.
+
+4. Save the changes to the “httpd.conf” file.
+
+
+
+Step 6: Testing the Configuration
+To verify that your Laravel project is properly configured, follow these steps:
+
+1. Stop and restart the Apache server from the XAMPP interface.
+2. Open your web browser and visit “http://project.test".
+3. If everything is set up correctly, you should see the homepage of your Laravel project.
+
+Conclusion
+By following these steps, you can configure a Laravel project to run with a custom domain name on a Windows machine using XAMPP. Remember that you can set up multiple projects with their own custom domains by creating separate directories within the htdocs folder and configuring their individual Apache settings.

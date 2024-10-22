@@ -12,14 +12,14 @@ class IndexController extends Controller
         return view('page', compact('header'));
     }
 
-    public function show()
+    public function show($id = 1)
     {
         $data = [
             'surname' => 'Иванов',
-            'profession' => 'Программист',
+            'staff' => 'Программист',
             'phone' => '55-55-55',
-            'experience' => '4 года',
-            'avatar' => 'ava1.jpg',
+            'stage' => '4 года',
+            'photo' => 'ava1.jpg',
         ];
         return view('resume', compact('data'));
     }

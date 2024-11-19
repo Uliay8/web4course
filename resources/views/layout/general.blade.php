@@ -16,10 +16,10 @@
 
 <div class="rightcol"><!--*******************Навигационное меню*******************-->
     <ul class="menu">
-        <li><a href="">Вакансии</a></li>
-        <li><a href="">Резюме по профессиям</a></li>
-        <li><a href="">Резюме по возрасту</a></li>
-        <li><a href="">Избранное резюме</a></li>
+        <li><a href="/showPersonsByStage">Люди со стажем от 5 до 15</a></li>
+        <li><a href="/showPersonsByStaff">Программисты</a></li>
+        <li><a href="/showCountResumes">Всего резюме</a></li>
+        <li><a href="/showDistinctProfessions">Люди, каких профессий, ищут работу</a></li>
     </ul>
 </div>
 <div class="footer" ><p>&copy; Copyright 2017</p></div>

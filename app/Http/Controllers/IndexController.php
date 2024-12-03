@@ -84,11 +84,9 @@ class IndexController extends Controller
 
         $staffEntry = Staff::where('staff', $validated['staff'])->first();
         $imagePath = "";
-         //E:/Git/web4course/
         if ($request->hasFile('image')){
             $imagePath = $request->file('image')->store('images', 'public');
         }
-//        dd($request->file('image')->store('images', 'public'));
         $person = new Person();
         $this->savePersonTodb($validated, $person, $staffEntry, $imagePath);
 

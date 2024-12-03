@@ -39,11 +39,6 @@
 
             <label for="image">Фото:</label>
             <input type="file" id="image" name="image" accept="image/*" >
-{{--            @if(old('image'))--}}
-{{--                <p>Текущее изображение:</p>value="{{ old('image') }}"--}}
-            {{--                <img src="{{  }}" alt="Фото" width="100">--}}
-{{--                <br>--}}
-{{--            @endif--}}
             @error('image')
             <p style="color: red;">{{ $message }}</p>
             @enderror

@@ -16,6 +16,8 @@
 
 <div class="rightcol"><!--*******************Навигационное меню*******************-->
     <ul class="menu">
+        <li><a href="/personCreate">Добавить резюме</a></li>
+        <li><a href="/person">Все резюме</a></li>
         <li><a href="/showPersonsByStage">Люди со стажем от 5 до 15</a></li>
         <li><a href="/showPersonsByStaff">Программисты</a></li>
         <li><a href="/showCountResumes">Всего резюме</a></li>

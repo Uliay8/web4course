@@ -1,24 +1,22 @@
 <?php
 
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\RubricController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-//
+
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-// {from}/{to}
-use App\Http\Controllers\IndexController;
+Auth::routes();
+Route::post('/loginUser', [IndexController::class, 'checkUser'])->name('loginUser');
+Route::post('/logoutUser', [IndexController::class, 'logoutUser'])->name('logoutUser');
+Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/rubrika/{rubric_id}', [IndexController::class, 'rubrika'])->name('rubrika');
+Route::get('/rubrics/create', [RubricController::class, 'create'])->name('rubrics.create');
+Route::post('/rubrics', [RubricController::class, 'store'])->name('rubrics.store');
 
-Route::get('/', [IndexController::class, 'index']);
-Route::get('/show/{id}', [IndexController::class, 'show']);
-Route::get("/showPersonsByStage/", [IndexController::class, 'showPersonsByStageFromTo']);
-Route::get("/showPersonsByStaff/", [IndexController::class, 'showPersonsAndStageByStaff']);
-Route::get("/showCountResumes/", [IndexController::class, 'showCountResumes']);
-Route::get("/showDistinctProfessions/", [IndexController::class, 'showDistinctProfessions']);
-Route::get("/personCreate/", [IndexController::class, 'personCreate'])->name('person.create');
-Route::post('/persons', [IndexController::class, 'store'])->name('person.store');
-Route::get('/person', [IndexController::class, 'index'])->name('person.index');
-Route::delete('/persons/{id}', [IndexController::class, 'destroy'])->name('person.destroy');
-Route::get('/persons/{id}/edit', [IndexController::class, 'edit'])->name('person.edit');
-Route::put('/persons/{id}', [IndexController::class, 'update'])->name('person.update');
-
-
+Route::get('/statya/{id}', [IndexController::class, 'statya'])->name('statya');
+Route::get('/add', [IndexController::class, 'create'])->name('add.create');
+Route::post('/add', [IndexController::class, 'store'])->name('add.store');
+Route::delete('/statya/{id}', [IndexController::class, 'destroy'])->name('statya.destroy');

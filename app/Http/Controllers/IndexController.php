@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Hash;
 
 class IndexController extends Controller
 {
@@ -45,7 +46,9 @@ class IndexController extends Controller
             dd("the user does not exist");
         }
         if ($user->password != $request->get('password')) {
-            dd("the password is incorrect");
+            if(!Hash::check($request->get('password'), $user->password)) {
+                dd("the password is incorrect");
+            }
         }
         config(['user.is_registered' => true]);
         config(['user.is_admin' => $user->admin]);
@@ -65,11 +68,47 @@ class IndexController extends Controller
         return redirect()->route('index');
     }
 
+    public function registerUser(Request $request){
+        $validatedData = $request->validate([
+            'email' => 'required|unique:users|string|max:255',
+            'password' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+        ], [
+            'email.unique' => 'Напишите уникальый адрес!!',
+        ]);
+
+//        dd($validatedData);
+        User::create($validatedData);
+        $user = User::where('email', $request->get('email'))->first();
+        if (!$user) {
+            dd("the user does not exist");
+        }
+        if ($user->password != $request->get('password')) {
+            if(!Hash::check($request->get('password'), $user->password)) {
+                dd("the password is incorrect");
+            }
+        }
+        config(['user.is_registered' => true]);
+        config(['user.is_admin' => $user->admin]);
+        config(['user.name' => $user->name]);
+        $fp = fopen(base_path() .'/config/user.php' , 'w');
+        fwrite($fp, '<?php return ' . var_export(config('user'), true) . ';');
+        fclose($fp);
+        return redirect()->route('index');
+    }
+
+    public function toLoginUser()
+    {
+        return view('auth.login');
+    }
+
+    public function toRegisterUser()
+    {
+        return view('auth.register');
+    }
+
     public function destroy($id)
     {
-//        if (!Auth::check() || !Auth::user()->is_admin) {
-//            return redirect()->route('index');
-//        }
         $statya = Statya::findOrFail($id);
         $statya->delete();
         return redirect()->route('index');
@@ -78,23 +117,19 @@ class IndexController extends Controller
 
     public function create()
     {
-//        if (!Auth::check() || !Auth::user()->is_admin) {
-//            return redirect()->route('index');
-//        }
         return view('add');
     }
 
     public function store(Request $request)
     {
-//        if (!Auth::check() || !Auth::user()->is_admin) {
-//            return redirect()->route('index');
-//        }
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|unique:statya|string|max:255',
             'lid' => 'required|string',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,gif,jpg|max:2048',
             'rubric_id' => 'required',
+        ], [
+            'title.unique' => 'Напишите уникальное имя статьи!',
         ]);
 
         $imagePath = "";
@@ -104,7 +139,6 @@ class IndexController extends Controller
         }
 
         Statya::create($validatedData);
-
         return redirect()->route('index');
     }
 }

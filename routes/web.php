@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::post('/loginUser', [IndexController::class, 'checkUser'])->name('loginUser');
 Route::post('/logoutUser', [IndexController::class, 'logoutUser'])->name('logoutUser');
+Route::post('/registerUser', [IndexController::class, 'registerUser'])->name('registerUser');
+Route::get('/login-user', [IndexController::class, 'toLoginUser'])->name('login-user');
+Route::get('/register-user', [IndexController::class, 'toRegisterUser'])->name('register-user');
+
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/rubrika/{rubric_id}', [IndexController::class, 'rubrika'])->name('rubrika');
 Route::get('/rubrics/create', [RubricController::class, 'create'])->name('rubrics.create');

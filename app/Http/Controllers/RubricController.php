@@ -21,11 +21,11 @@ class RubricController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|unique:rubrics|max:255',
+            'name' => 'required|unique:rubrics|string|max:255',
+        ], [
+            'name.unique' => 'Такое название рубрики существует!',
         ]);
-        $rubric = Rubric::create([
-            'name' => $validatedData['name'],
-        ]);
+        Rubric::create($validatedData);
         return redirect()->route('index');
     }
 }

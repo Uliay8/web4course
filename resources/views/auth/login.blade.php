@@ -44,6 +44,11 @@
                             </div>
                         </div>
                     </form>
+                    <div class="row mb-0">
+                        <a href="{{ route('register-user') }}" style="text-decoration: none">
+                            <h4>Зарегистрироваться</h4>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

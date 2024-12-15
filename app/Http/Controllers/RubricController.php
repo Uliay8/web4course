@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Rubric;
+use App\Models\Type;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -11,7 +11,7 @@ class RubricController extends Controller
 {
     public function __construct()
     {
-        $rubrics = Rubric::all();
+        $rubrics = Type::all();
         view()->share('rubrics', $rubrics);
     }
     public function create()
@@ -25,7 +25,7 @@ class RubricController extends Controller
         ], [
             'name.unique' => 'Такое название рубрики существует!',
         ]);
-        Rubric::create($validatedData);
+        Type::create($validatedData);
         return redirect()->route('index');
     }
 }

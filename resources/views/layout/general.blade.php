@@ -1,76 +1,85 @@
-
-
 <!DOCTYPE html>
-<html lang="en">{{--class="no-js"--}}
+<html lang="en">
 <head>
-
+    <title>Main Page</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Новости науки</title>
-    <link rel="stylesheet" href="{{ asset('stylesheets/foundation.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('stylesheets/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('stylesheets/app.css') }}">
-    <script src="{{ asset('javascripts/modernizr.foundation.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('fonts/ligature.css') }}">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Playfair+Display:400italic' rel='stylesheet' type='text/css' />
-{{--    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>--}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css') }}">
 </head>
-<body>
-<nav>
-    <div class="twelve columns header_nav">
-        <div class="row">
-            <ul id="menu-header" class="nav-bar horizontal">
-                <li><a href="{{ route('index') }}">Главная</a></li>
-                @foreach($rubrics as $rubric)
-                    <li><a href="{{ route('rubrika', $rubric->id) }}">{{ $rubric->name }}</a></li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
 
-    <div class="">
-        @if(Config::get('user.is_admin'))
-            <span class="">Admin</span>
+<body class="dp">
+<div class="header">
+    <div class="row grid middle between">
+        <div class="logo">
+            <img src="{{ asset('images/logo.png') }}">
+        </div>
+        <div class="title">
+            <a href="{{ route('index') }}" style="text-decoration: none; color: #00044c"> Клуб любителей творчества «ОчУмелые ручки»</a>
+        </div>
+        @if(Config::get('user.is_registered'))
+            <div class="auth">
+                @if(Config::get('user.is_master'))
+                    <span class="">Master</span><br>
+                @endif
+                <span class="">{{ Config::get('user.fio') }}</span>
+                <form method="POST" action="{{ route('logoutUser') }}" style="width: 100%;">
+                    @csrf
+                    <button type="submit" class="">
+                        Выйти
+                    </button>
+                </form>
+            </div>
+        @else
+            <div class="auth">
+                <form method="GET" action="{{ route('login-user') }}" style="width: 100%;">
+                    @csrf
+                    <button type="submit" class="">
+                        Вход
+                    </button>
+                </form>
+{{--                <form method="GET" action="{{ route('register-user') }}" style="width: 100%;">--}}
+{{--                    @csrf--}}
+{{--                    <button type="submit" class="">--}}
+{{--                        Зарегистрироваться--}}
+{{--                    </button>--}}
+{{--                </form>--}}
+{{--            <a href="">Вход</a>--}}
+            </div>
         @endif
-        <span class="">{{ Config::get('user.name') }}</span>
-        <form method="POST" action="{{ route('logoutUser') }}">
-            @csrf
-            <button type="submit" class="">
-                Выйти
-            </button>
-        </form>
     </div>
-
-</nav>
-<header>
-    @yield('header')
-</header>
-
-<main>
-    @yield('content')
-{{--    <section>--}}
-{{--        <div class="section_dark">--}}
-{{--            <div class="row">--}}
-{{--                <h2></h2>--}}
-{{--                <div class="two columns">--}}
-{{--                    <img src="images/thumb1.jpg" alt="desc" />--}}
-{{--                </div>--}}
-{{--            </div>--}}
+</div>
+{{--<div class="row row--nogutter">--}}
+{{--    <div class="menu-burger">--}}
+{{--        <div class="burger">--}}
+{{--            <div></div>--}}
+{{--            <div></div>--}}
+{{--            <div></div>--}}
 {{--        </div>--}}
-{{--    </section>--}}
+{{--    </div>--}}
+{{--</div>--}}
+@yield('line')
 
-</main>
-<footer>
+@if(session('success'))
+    <div class="row row--nogutter top-line">
+        <div class="line" style="color: white">{{ session('success') }}</div>
+    </div>
+@endif
+
+<div class="main">
     <div class="row">
-        <div class="twelve columns footer">
-            <a href="https://twitter.com/" class="lsf-icon" style="font-size:16px; margin-right:15px" title="twitter">Twitter</a>
-            <a href="https://facebook.com/" class="lsf-icon" style="font-size:16px; margin-right:15px" title="facebook">Facebook</a>
-            <a href="https://pinterest.com/" class="lsf-icon" style="font-size:16px; margin-right:15px" title="pinterest">Pinterest</a>
-            <a href="https://instagram.com/" class="lsf-icon" style="font-size:16px" title="instagram">Instagram</a>
+        @yield('content')
+    </div>
+</div>
+@yield('line-two')
+<div class="footer">
+    <div class="row">
+        <div class="row--small grid between">
+            <div class="address">Наш адрес: ВДНХ, 120в</div>
+            <div class="tel">Тел: 89123456765</div>
+            <div class="copy">(с) Copyright, 2017</div>
         </div>
     </div>
-</footer>
-<script src="{{ asset('javascripts/foundation.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('javascripts/app.js') }}" type="text/javascript"></script>
+</div>
 </body>
 </html>

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rubric;
-use App\Models\Statya;
+use App\Models\Participant;
+use App\Models\Type;
+use App\Models\Workshop;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,112 +15,122 @@ class IndexController extends Controller
 {
     public function __construct()
     {
-        $rubrics = Rubric::all();
-        view()->share('rubrics', $rubrics);
+        $types = Type::all();
+        view()->share('types', $types);
     }
     public function index()
     {
-        if (Config::get('user.is_registered')) {
+        if (Config::get('user.is_master')) {
 //            dump(Config::get('user.is_admin'));
-            $statyas = Statya::all();
-            return view('index', compact('statyas'));
-        } else {
-            return view('auth.login');
+//            $statyas = Workshop::all();compact('statyas')
+            return $this->cabinet();
         }
+        // admin - lk ? usser - mainpage
+        return view('index');
     }
-    public function rubrika($rubric_id)
+    public function type($type_id)
     {
-        $statyas = Statya::where('rubric_id', $rubric_id)->get();
-        $rubrika = Rubric::find($rubric_id);
-        return view('rubrika', compact('statyas', 'rubrika'));
+        $workshops = Workshop::join('users', 'workshops.master_id', '=', 'users.id')
+            ->join('hours', 'workshops.time_id', '=', 'hours.id')
+            ->where('type_id', $type_id)
+            ->select('workshops.id', 'image', 'name', 'fio', 'description', 'date', 'slot', 'cost', 'number_of_seats')
+            ->get();
+        $parts = Participant::join('workshops', 'participants.workshop_id', '=', 'workshops.id')
+            ->where('type_id', $type_id)
+            ->select('workshop_id')
+            ->distinct()
+            ->get(); // workshop_id all
+        $counts = array();
+        $included = array();
+        foreach ($parts as $part) {
+            $count = Participant::where('workshop_id', $part->workshop_id)
+                ->groupBy('workshop_id')
+                ->count();
+            $counts[$part->workshop_id] = $count;
+        }
+        foreach ($workshops as $ws) {
+            $isIncluded = Participant::where('workshop_id', $ws->id)
+                ->where('user_id', Config::get('user.user_id'))
+                ->get();
+            if(count($isIncluded)==1) {
+                $included[$ws->id] = true;
+            } else {
+                $included[$ws->id] = false;
+            }
+        }
+//        dd($included);
+        $type = Type::find($type_id);
+        return view('type', compact('workshops', 'type', 'counts', 'included'));
     }
+    public function cabinet(){
+        $master_id = Config::get('user.user_id');
+        $master = User::where('id', $master_id)->first();
+        $workshops = Workshop::join('users', 'workshops.master_id', '=', 'users.id')
+            ->join('hours', 'workshops.time_id', '=', 'hours.id')
+            ->where('workshops.master_id', $master_id)
+            ->select('workshops.id', 'name', 'date', 'slot')
+            ->get();
+        $participants = array();
+        foreach ($workshops as $ws) {
+            $part = Participant::join('users', 'participants.user_id', '=', 'users.id')
+                ->where('workshop_id', $ws->id)
+                ->select('participants.workshop_id', 'fio', 'email', 'number', 'birthday')
+                ->get();
+            $participants[$ws->id] = $part;
+        }
+//        dd($participants);
+        return view('cabinet', compact('master', 'workshops', 'participants'));
+    }
+
+    public function toConfirm($ws_id){
+//        ФИО пользователя, вид творчества, ФИО мастера, дата, время, кнопки подтверждения и отмены.
+        $userFio = Config::get('user.fio');
+        $ws = Workshop::where('workshops.id', $ws_id)
+            ->join('users', 'workshops.master_id', '=', 'users.id')
+            ->join('hours', 'workshops.time_id', '=', 'hours.id')
+            ->join('types', 'workshops.type_id', '=', 'types.id')
+            ->select('workshops.id', 'workshops.name', 'users.fio', 'workshops.date', 'hours.slot', 'workshops.type_id')
+            ->get();
+        $ws = $ws[0];
+//        dd($ws);
+        return view('confirm', compact('ws', 'userFio'));
+    }
+    public function toCancelWs($type_id){
+        return redirect()->route('type', $type_id)->with('success', 'Отмена успешна');
+    }
+    public function storePart($ws_id){
+        $part = new Participant();
+        $part->user_id = Config::get('user.user_id');;
+        $part->workshop_id = $ws_id;
+        $part->save();
+        $type_id = Workshop::where('id', $ws_id)
+            ->select('type_id')
+            ->get();
+        $type_id = $type_id[0]->type_id;
+//        dd($type_id);
+        return redirect()->route('type', $type_id)->with('success', 'Запись добавлена');
+    }
+
+
     public function statya($id)
     {
-        $statya = Statya::find($id);
-        $rubrika = Rubric::find($statya->rubric_id);
+        $statya = Workshop::find($id);
+        $rubrika = Type::find($statya->rubric_id);
         return view('statya', compact('statya', 'rubrika'));
     }
-    public function checkUser(Request $request)
-    {
-        $user = User::where('email', $request->get('email'))->first();
-        if (!$user) {
-            dd("the user does not exist");
-        }
-        if ($user->password != $request->get('password')) {
-            if(!Hash::check($request->get('password'), $user->password)) {
-                dd("the password is incorrect");
-            }
-        }
-        config(['user.is_registered' => true]);
-        config(['user.is_admin' => $user->admin]);
-        config(['user.name' => $user->name]);
-        $fp = fopen(base_path() .'/config/user.php' , 'w');
-        fwrite($fp, '<?php return ' . var_export(config('user'), true) . ';');
-        fclose($fp);
-        return redirect()->route('index');
-    }
-    public function logoutUser(Request $request){
-        config(['user.is_registered' => false]);
-        config(['user.is_admin' => false]);
-        config(['user.name' => ""]);
-        $fp = fopen(base_path() .'/config/user.php' , 'w');
-        fwrite($fp, '<?php return ' . var_export(config('user'), true) . ';');
-        fclose($fp);
-        return redirect()->route('index');
-    }
 
-    public function registerUser(Request $request){
-        $validatedData = $request->validate([
-            'email' => 'required|unique:users|string|max:255',
-            'password' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-        ], [
-            'email.unique' => 'Напишите уникальый адрес!!',
-        ]);
-
-//        dd($validatedData);
-        User::create($validatedData);
-        $user = User::where('email', $request->get('email'))->first();
-        if (!$user) {
-            dd("the user does not exist");
-        }
-        if ($user->password != $request->get('password')) {
-            if(!Hash::check($request->get('password'), $user->password)) {
-                dd("the password is incorrect");
-            }
-        }
-        config(['user.is_registered' => true]);
-        config(['user.is_admin' => $user->admin]);
-        config(['user.name' => $user->name]);
-        $fp = fopen(base_path() .'/config/user.php' , 'w');
-        fwrite($fp, '<?php return ' . var_export(config('user'), true) . ';');
-        fclose($fp);
-        return redirect()->route('index');
-    }
-
-    public function toLoginUser()
-    {
-        return view('auth.login');
-    }
-
-    public function toRegisterUser()
-    {
-        return view('auth.register');
-    }
 
     public function destroy($id)
     {
-        $statya = Statya::findOrFail($id);
+        $statya = Workshop::findOrFail($id);
         $statya->delete();
         return redirect()->route('index');
 
     }
-
     public function create()
     {
         return view('add');
     }
-
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -138,7 +149,7 @@ class IndexController extends Controller
             $validatedData['image'] = basename($imagePath);
         }
 
-        Statya::create($validatedData);
+        Workshop::create($validatedData);
         return redirect()->route('index');
     }
 }

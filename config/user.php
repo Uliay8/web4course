@@ -1,5 +1,6 @@
 <?php return array (
   'is_registered' => true,
-  'is_admin' => true,
-  'name' => 'Uliana',
+  'is_master' => false,
+  'fio' => 'Шин Шин Шин',
+  'user_id' => 11,
 );

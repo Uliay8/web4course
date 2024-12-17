@@ -17,38 +17,35 @@
             @endforeach
         </ul>
     </div>
+    @if(Config::get('user.is_registered')&&!Config::get('user.is_master'))
+        <div class="row shedule">
+            <div class="row--small">
+                <h2>Куда я записался</h2>
+                <div class="drivers">
+                    @foreach($usersWorkshops as $ws)
+                        <div class="driver grid">
+                            <div class="driver-left grid">
+                                <div class="driver-text">
+                                    <div class="driver-name">{{ $ws->name }} <br><br>ФИО мастера: {{ $ws->fio }}</div>
+                                </div>
+                            </div>
+                            <div class="driver-right">
+                                <div class="driver-time">Дата: {{ Str::substr($ws->date, 8, 2) }}.{{ Str::substr($ws->date, 5, 2) }}.{{ Str::substr($ws->date, 2, 2) }}
+                                    <br>Слот: {{ $ws->slot }} часов</div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @section('line-two')
-    <div class="row row--nogutter top-line">
-        <div class="line"></div>
-    </div>
+    @if(!Config::get('user.is_registered')||Config::get('user.is_master'))
+        <div class="row row--nogutter top-line">
+            <div class="line"></div>
+        </div>
+    @endif
 @endsection
 
-
-{{--<div class="section_main">--}}
-{{--    <div class="row">--}}
-{{--        <section class="eight columns">--}}
-{{--            @foreach($statyas as $statya)--}}
-{{--                <article class="blog_post">--}}
-{{--                    <div class="three columns">--}}
-{{--                        <a href="{{ route('statya', $statya->id) }}" class="th">--}}
-{{--                            <img src="{{ asset('storage/images/' . $statya->image) }}" alt="{{ $statya->title }}" />--}}
-{{--                        </a>--}}
-{{--                    </div>--}}
-{{--                    <div class="nine columns">--}}
-{{--                        <a href="{{ route('statya', $statya->id) }}"><h4>{{ $statya->title }}</h4></a>--}}
-{{--                        <p>{{ Str::limit($statya->lid, 100) }}</p>--}}
-{{--                        @if (Config::get('user.is_admin'))--}}
-{{--                            <form action="{{ route('statya.destroy', $statya->id) }}" method="POST" style="display: inline;">--}}
-{{--                                @csrf--}}
-{{--                                @method('DELETE')--}}
-{{--                                <button type="submit">Удалить</button>--}}
-{{--                            </form>--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
-{{--                </article>--}}
-{{--            @endforeach--}}
-{{--        </section>--}}
-{{--    </div>--}}
-{{--</div>--}}

@@ -38,26 +38,11 @@
                         Вход
                     </button>
                 </form>
-{{--                <form method="GET" action="{{ route('register-user') }}" style="width: 100%;">--}}
-{{--                    @csrf--}}
-{{--                    <button type="submit" class="">--}}
-{{--                        Зарегистрироваться--}}
-{{--                    </button>--}}
-{{--                </form>--}}
-{{--            <a href="">Вход</a>--}}
             </div>
         @endif
     </div>
 </div>
-{{--<div class="row row--nogutter">--}}
-{{--    <div class="menu-burger">--}}
-{{--        <div class="burger">--}}
-{{--            <div></div>--}}
-{{--            <div></div>--}}
-{{--            <div></div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--</div>--}}
+
 @yield('line')
 
 @if(session('success'))

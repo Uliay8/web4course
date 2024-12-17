@@ -68,7 +68,6 @@ class UserController extends Controller
             'email.unique' => 'Напишите уникальный адрес!!',
         ]);
 
-//        dd($validatedData);
         $user = new User();
         $user->fio = $validatedData['fio'];
         $user->email = $validatedData['email'];
@@ -78,7 +77,6 @@ class UserController extends Controller
         $user->is_master = false;
         $user->save();
 
-//        User::create($validatedData);
         $user = User::where('email', $request->get('email'))->first();
         config(['user.is_registered' => true]);
         config(['user.is_admin' => $user->admin]);

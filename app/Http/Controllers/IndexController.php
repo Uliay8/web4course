@@ -21,11 +21,26 @@ class IndexController extends Controller
     public function index()
     {
         if (Config::get('user.is_master')) {
-//            dump(Config::get('user.is_admin'));
-//            $statyas = Workshop::all();compact('statyas')
             return $this->cabinet();
         }
-        // admin - lk ? usser - mainpage
+        if (Config::get('user.is_registered')) {
+            $userId = Config::get('user.user_id');
+            $allRecords = Participant::join('workshops', 'participants.workshop_id', '=', 'workshops.id')
+                ->where('user_id', $userId)
+                ->select('workshop_id')
+                ->get();
+            $usersWorkshops = array();
+            for ($i = 0; $i <= count($allRecords) - 1; $i++) {
+                $usersWs = Workshop::join('users', 'workshops.master_id', '=', 'users.id')
+                    ->join('hours', 'workshops.time_id', '=', 'hours.id')
+                    ->where('workshops.id', $allRecords[$i]->workshop_id)
+                    ->select('workshops.id', 'name', 'date', 'slot', 'users.fio')
+                    ->get();
+                $usersWs = $usersWs[0];
+                $usersWorkshops[$usersWs->id] = $usersWs;
+            }
+            return view('index', compact('usersWorkshops'));
+        }
         return view('index');
     }
     public function type($type_id)
@@ -58,7 +73,6 @@ class IndexController extends Controller
                 $included[$ws->id] = false;
             }
         }
-//        dd($included);
         $type = Type::find($type_id);
         return view('type', compact('workshops', 'type', 'counts', 'included'));
     }
@@ -78,7 +92,6 @@ class IndexController extends Controller
                 ->get();
             $participants[$ws->id] = $part;
         }
-//        dd($participants);
         return view('cabinet', compact('master', 'workshops', 'participants'));
     }
 
@@ -92,7 +105,6 @@ class IndexController extends Controller
             ->select('workshops.id', 'workshops.name', 'users.fio', 'workshops.date', 'hours.slot', 'workshops.type_id')
             ->get();
         $ws = $ws[0];
-//        dd($ws);
         return view('confirm', compact('ws', 'userFio'));
     }
     public function toCancelWs($type_id){
@@ -107,49 +119,6 @@ class IndexController extends Controller
             ->select('type_id')
             ->get();
         $type_id = $type_id[0]->type_id;
-//        dd($type_id);
         return redirect()->route('type', $type_id)->with('success', 'Запись добавлена');
-    }
-
-
-    public function statya($id)
-    {
-        $statya = Workshop::find($id);
-        $rubrika = Type::find($statya->rubric_id);
-        return view('statya', compact('statya', 'rubrika'));
-    }
-
-
-    public function destroy($id)
-    {
-        $statya = Workshop::findOrFail($id);
-        $statya->delete();
-        return redirect()->route('index');
-
-    }
-    public function create()
-    {
-        return view('add');
-    }
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|unique:statya|string|max:255',
-            'lid' => 'required|string',
-            'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,gif,jpg|max:2048',
-            'rubric_id' => 'required',
-        ], [
-            'title.unique' => 'Напишите уникальное имя статьи!',
-        ]);
-
-        $imagePath = "";
-        if ($request->hasFile('image')){
-            $imagePath = $request->file('image')->store('images', 'public');
-            $validatedData['image'] = basename($imagePath);
-        }
-
-        Workshop::create($validatedData);
-        return redirect()->route('index');
     }
 }
